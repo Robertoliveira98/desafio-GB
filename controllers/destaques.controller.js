@@ -16,8 +16,8 @@ class DestaquesController {
     async salvarDestaquesLista(req, res, next){
 
         try {
-            await service.salvarDestaquesLista();
-            res.status(200).json({sucesso: true});
+            let sucesso = await service.salvarDestaquesLista();
+            res.status(200).json({sucesso});
         } catch (error) {
             res.status(500).json({mensagem: "Erro na API GitHub"});
         }

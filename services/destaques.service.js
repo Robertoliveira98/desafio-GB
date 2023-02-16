@@ -4,7 +4,7 @@ const destaquesModel = require('../models/destaques.model');
 
 class DestaquesService {
     async listarDestaquesPorLinguagem(params){
-        let linguagem = _getValueOrDefault(params, "linguagem", "");
+        let linguagem = this._getValueOrDefault(params, "linguagem", "");
         return await githubAdapter.requestGithubApi(linguagem, "stars", "desc", 5, 1)
     }
 
@@ -12,27 +12,36 @@ class DestaquesService {
          
         await destaquesModel.remove();
         let listaLinguagens = await linguagensModel.find();
+        let listaDestaques = await this._getDestaquesPorLinguagens(listaLinguagens);
+
+        
+        listaDestaques.map(async (destaque) => {
+            await destaquesModel.create({
+                nome: this._getValueOrDefault(destaque, "name", ""),
+                criador: this._getValueOrDefault(destaque, "owner.login", ""),
+                descricao: this._getValueOrDefault(destaque, "description", ""),
+                url: this._getValueOrDefault(destaque, "url", ""),
+                linguagem: this._getValueOrDefault(destaque, "language", ""),
+                topicos: this._getValueOrDefault(destaque, "topics", []),
+                estrelas: this._getValueOrDefault(destaque, "stargazers_count", 0)
+            })
+        });
+
+        return listaDestaques > 0;
+
+    }
+
+    async _getDestaquesPorLinguagens(listaLinguagens){
         let listaDestaques = [];
 
         let promise = listaLinguagens.map(async (linguagem) => {
             let response = await githubAdapter.requestGithubApi(linguagem.nome, "stars", "desc", 5, 1);
-            let destaques = _getValueOrDefault(response, "data.items", []);
+            let destaques = this._getValueOrDefault(response, "data.items", []);
             listaDestaques = listaDestaques.concat(destaques);
         });
         await Promise.all(promise);
 
-        listaDestaques.map(async (destaque) => {
-            await destaquesModel.create({
-                nome: _getValueOrDefault(destaque, "name", ""),
-                criador: _getValueOrDefault(destaque, "owner.login", ""),
-                descricao: _getValueOrDefault(destaque, "description", ""),
-                url: _getValueOrDefault(destaque, "url", ""),
-                linguagem: _getValueOrDefault(destaque, "language", ""),
-                topicos: _getValueOrDefault(destaque, "topics", []),
-                estrelas: _getValueOrDefault(destaque, "stargazers_count", 0)
-            })
-        });
-
+        return listaDestaques;
     }
 
     async listarDestaques(){
@@ -44,28 +53,29 @@ class DestaquesService {
     }
 
     async detalhesRepositorio(params){
-        let id = _getValueOrDefault(params, "idRepo", "");
+        let id = this._getValueOrDefault(params, "idRepo", "");
         return await destaquesModel.findById(id);
     }
 
-}
+    
 
-function _getValueOrDefault(obj, path, defaultValue = undefined) {
-    try {
-        let prop = _getProp(obj, path);
-        if (typeof prop === 'undefined') return defaultValue;
-        return prop;
-    } catch (error) {
-        return defaultValue;
+    _getValueOrDefault(obj, path, defaultValue = undefined) {
+        try {
+            let prop = this._getProp(obj, path);
+            if (typeof prop === 'undefined') return defaultValue;
+            return prop;
+        } catch (error) {
+            return defaultValue;
+        }
     }
-}
 
-function _getProp(obj, desc) {
-    var arr = desc.split('.');
-    while (arr.length) {
-        obj = obj[arr.shift()];
+    _getProp(obj, desc) {
+        var arr = desc.split('.');
+        while (arr.length) {
+            obj = obj[arr.shift()];
+        }
+        return obj;
     }
-    return obj;
 }
 
 module.exports = new DestaquesService();
