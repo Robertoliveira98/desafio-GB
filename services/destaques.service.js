@@ -27,7 +27,7 @@ class DestaquesService {
             })
         });
 
-        return listaDestaques > 0;
+        return listaDestaques.length > 0;
 
     }
 

@@ -9,7 +9,7 @@ class DestaquesController {
 
             res.status(200).json(response.data);
         } catch (error) {
-            res.status(500).json(error.message);
+            res.status(500).json({mensagem: error.message});
         }
     }
     
@@ -36,7 +36,10 @@ class DestaquesController {
     async destalhesRepositorio(req, res, next){
         try {
             let detalhes = await service.detalhesRepositorio(req.params);
-            res.status(200).json(detalhes);
+            if (detalhes)
+                res.status(200).json(detalhes);
+            else 
+                res.status(500).json({mensagem: "Id não encontrado"});
         } catch (error) {
             res.status(500).json({mensagem: "Erro ao requisitar detalhes do repositorio"});
         }
