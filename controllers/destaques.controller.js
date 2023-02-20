@@ -1,5 +1,4 @@
 const service = require('../services/destaques.service');
-
 class DestaquesController {
 
     async listarDestaquesPorLinguagem(req, res, next){
@@ -45,6 +44,14 @@ class DestaquesController {
         }
     }
 
-}
+    async getLinguagens(req, res, next) {
 
+        try {
+            let linguagens = await service.getLinguagens();
+            res.status(200).json(linguagens);
+        } catch (error) {
+            res.status(500).json({ mensagem: "Erro ao requisitar lista de linguagens" });
+        }
+    }
+}
 module.exports = new DestaquesController();

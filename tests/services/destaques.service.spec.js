@@ -185,6 +185,24 @@ describe("Class DestaquesService", () => {
     });
   });
 
+  describe("Method getLinguagens", () => {
+    it("return lista", async () => {
+      let mockLinguagens = [
+        {
+          nome: "teste",
+        },
+        {
+          nome: "teste2",
+        },
+      ];
+      const stub = sandbox.stub(linguagensModel, "find").resolves(mockLinguagens);
+
+      const response = await destaquesService.getLinguagens();
+      expect(stub.calledOnce).to.be.true;
+      expect(response).to.deep.equal(mockLinguagens);
+    });
+  });
+
   describe("Method _getValueOrDefault", () => {
     it("sucesso", async () => {
       let mock = {

@@ -1,4 +1,5 @@
 const destaquesService = require('../../services/destaques.service');
+const linguagensModel = require("../../models/linguagens.model");
 const app = require("../../app");
 const sinon = require('sinon');
 const chai = require('chai');
@@ -145,4 +146,43 @@ describe('Class DestaquesController', () => {
       expect(res.body).to.deep.equal(error);
     });
   });
+
+	describe('Method getLinguagens', () => {
+		it('Sucesso', async () => {
+
+			let mock = [
+				{
+					nome: "teste",
+				},
+				{
+					nome: "teste1",
+				},
+				{
+					nome: "teste2",
+				},
+				{
+					nome: "teste3",
+				},
+				{
+					nome: "teste4",
+				}
+			];
+
+			sandbox.stub(destaquesService, "getLinguagens").resolves(mock);
+			const res = await request(app).get("/linguagens");
+			expect(res.status).to.equal(200);
+			expect(res.body).to.deep.equal(mock);
+		});
+		it('Error', async () => {
+
+			let error = {
+				mensagem: "Erro ao requisitar lista de linguagens"
+			}
+
+			sandbox.stub(destaquesService, "getLinguagens").rejects();
+			const res = await request(app).get("/linguagens");
+			expect(res.status).to.equal(500);
+			expect(res.body).to.deep.equal(error);
+		});
+	});
 });

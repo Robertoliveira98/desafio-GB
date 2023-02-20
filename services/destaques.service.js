@@ -57,6 +57,9 @@ class DestaquesService {
         return await destaquesModel.findById(id);
     }
 
+    async getLinguagens(){
+        return await linguagensModel.find();
+    }
     
 
     _getValueOrDefault(obj, path, defaultValue = undefined) {

@@ -1,5 +1,6 @@
 const controllers = require('./controllers');
 const destaquesController = require('./controllers/destaques.controller');
+const { populaLinguagens } = require('./middleware/destaques.middleware');
 
 module.exports = function (app) {
 
@@ -9,7 +10,7 @@ module.exports = function (app) {
          destaquesController.listarDestaquesPorLinguagem(req, res, next);
     });
 
-    app.get('/salvarDestaques', (req, res, next) => {
+    app.get('/salvarDestaques', populaLinguagens, (req, res, next) => {
         destaquesController.salvarDestaquesLista(req, res, next);
     });
 
