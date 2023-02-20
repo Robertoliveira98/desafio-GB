@@ -21,6 +21,10 @@ module.exports = function (app) {
     app.get('/detalhes/:idRepo', (req, res, next) => {
         destaquesController.destalhesRepositorio(req, res, next);
     });
-  
+
+    app.get('/linguagens', (req, res, next) => {
+        destaquesController.getLinguagens(req, res, next);
+    });
+
 
 }

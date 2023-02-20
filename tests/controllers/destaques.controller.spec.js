@@ -47,35 +47,67 @@ describe('Class DestaquesController', () => {
     });
   });
 
-  describe('Method salvarDestaquesLista', () => {
-    it('Sucesso', async () => {
+	describe('Method salvarDestaquesLista', () => {
+		
+		let mock = [
+			{
+				nome: "teste",
+			},
+			{
+				nome: "teste1",
+			},
+			{
+				nome: "teste2",
+			},
+			{
+				nome: "teste3",
+			},
+			{
+				nome: "teste4",
+			}
+		];
 
-      let mock = {
-        data: [
-          {
-            nome: "teste",
-            criador: "nome criador",
-            linguageem: "Java"
-          }
-        ]
-      }
+		it('Sucesso', async () => {
 
-      sandbox.stub(destaquesService, "salvarDestaquesLista").resolves(true);
-      const res = await request(app).get("/salvarDestaques");
-      expect(res.status).to.equal(200);
-      expect(res.body).to.deep.equal({sucesso: true});
-    });
-    it('Error', async () => {
-      let error = {
-        mensagem: "Erro na API GitHub"
-      }
+			const stub = sandbox.stub(linguagensModel, "find").resolves(mock);
+			const stubRemove = sandbox.stub(linguagensModel, "remove").resolves();
+			sandbox.stub(destaquesService, "salvarDestaquesLista").resolves(true);
+			const res = await request(app).get("/salvarDestaques");
+			expect(stub.calledOnce).to.be.true;
+			expect(stubRemove.calledOnce).to.be.false;
+			expect(res.status).to.equal(200);
+			expect(res.body).to.deep.equal({ sucesso: true });
+		});
 
-      sandbox.stub(destaquesService, "salvarDestaquesLista").rejects();
-      const res = await request(app).get("/salvarDestaques");
-      expect(res.status).to.equal(500);
-      expect(res.body).to.deep.equal(error);
-    });
-  });
+		it('Sucesso - inserindo linguagens middleware', async () => {
+
+			const stub = sandbox.stub(linguagensModel, "find").resolves([]);
+			const stubRemove = sandbox.stub(linguagensModel, "remove").resolves();
+			const stubInsert = sandbox.stub(linguagensModel, "insertMany").resolves();
+			sandbox.stub(destaquesService, "salvarDestaquesLista").resolves(true);
+			const res = await request(app).get("/salvarDestaques");
+			expect(stub.calledOnce).to.be.true;
+			expect(stubRemove.calledOnce).to.be.true;
+			expect(stubInsert.calledOnce).to.be.true;
+			expect(res.status).to.equal(200);
+			expect(res.body).to.deep.equal({ sucesso: true });
+		});
+
+		it('Error', async () => {
+			let error = {
+				mensagem: "Erro na API GitHub"
+			}
+
+			const stub = sandbox.stub(linguagensModel, "find").resolves(mock);
+			const stubRemove = sandbox.stub(linguagensModel, "remove").resolves();
+			sandbox.stub(destaquesService, "salvarDestaquesLista").rejects();
+			const res = await request(app).get("/salvarDestaques");
+			expect(stub.calledOnce).to.be.true;
+			expect(stubRemove.calledOnce).to.be.false;
+			expect(res.status).to.equal(500);
+			expect(res.body).to.deep.equal(error);
+		});
+	});
 
   describe('Method listarDestaques', () => {
     it('Sucesso', async () => {
