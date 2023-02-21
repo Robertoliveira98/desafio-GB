@@ -24,11 +24,11 @@ Executado em http://localhost:3000.
 # Endpoints
 
 ## GET http://localhost:3000/linguagens
-Retorna lista de linguagens usadas para exibir a lista de destaques.
+Retorna as linguagens usadas para exibir a lista de repositórios destaques.
 Linguagens default são: JavaScript, Python, C, Java e Swift.
 
 ## GET http://localhost:3000/salvarDestaques
-Faz requisição para API do GitHub para pegar 5 repositórios para as linguagens salvas na collection e salva o resultado no bando de dados.
+Faz requisição para API do GitHub para pegar os repositórios para as linguagens salvas e armazena o resultado no banco de dados.
 
 ## GET http://localhost:3000/listarDestaques
 Retorna lista de todos os repositórios destaques.
