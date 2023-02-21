@@ -1,2 +1,42 @@
-# desafio-GB
- 
+
+# Banco de dados
+
+Executar na porta http://localhost:27017
+MongoDB v4.4.6
+
+Nome do banco: "desafioGB"
+
+Node v14.16.0
+
+# Instalação
+```bash 
+npm install
+```
+
+# Execução
+
+### Executar MongoDB
+
+```bash
+npm start
+```
+
+Executado em http://localhost:3000.
+
+# Endpoints
+
+
+## GET http://localhost:3000/linguagens
+Retorna lista de linguagens configuradas para exibir a lista de destaques.
+
+## GET http://localhost:3000/salvarDestaques
+Faz requisição para API do GitHub para pegar 5 repositórios para as linguagens salvas na collection e salva o resultado no bando de dados.
+
+## GET http://localhost:3000/listarDestaques
+Retorna lista de todos os repositórios destaques.
+
+## GET http://localhost:3000/listarDestaques/:linguagem
+Retorna lista de todos os repositórios destaques por linguagem.
+
+## GET http://localhost:3000/detalhes/:idRepo
+Retorna detalhes do repositório pelo id.
