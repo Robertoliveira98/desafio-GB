@@ -6,11 +6,11 @@ let sandbox = require('sandbox');
 const axios = require('axios');
 
 beforeEach(() => {
-  sandbox = sinon.createSandbox();
+    sandbox = sinon.createSandbox();
 });
 
 afterEach(() => {
-  sandbox.restore();
+    sandbox.restore();
 });
 
 describe('Class GithubAdapter', () => {
