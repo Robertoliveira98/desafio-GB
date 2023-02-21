@@ -3,17 +3,30 @@ const linguagensModel = require('../models/linguagens.model');
 const destaquesModel = require('../models/destaques.model');
 
 class DestaquesService {
-    async listarDestaquesPorLinguagem(params){
+
+    async listarDestaquesPorLinguagem(params) {
         let linguagem = this._getValueOrDefault(params, "linguagem", "");
-        return await githubAdapter.requestGithubApi(linguagem, "stars", "desc", 5, 1)
+        let regex = new RegExp("^" + linguagem + "$", "i");
+        let aggregate = [
+            { $match: { linguagem: regex } },
+            {
+                $project: {
+                    "nome": 1,
+                    "criador": 1,
+                    "linguagem": 1
+                }
+            }
+        ];
+        return await destaquesModel.aggregate(aggregate);
     }
 
     async salvarDestaquesLista(){
-         
-        await destaquesModel.remove();
+
         let listaLinguagens = await linguagensModel.find();
         let listaDestaques = await this._getDestaquesPorLinguagens(listaLinguagens);
 
+        if (listaDestaques.length > 0)
+            await destaquesModel.remove();
         
         listaDestaques.map(async (destaque) => {
             await destaquesModel.create({

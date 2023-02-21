@@ -1,14 +1,13 @@
 const service = require('../services/destaques.service');
 class DestaquesController {
 
-    async listarDestaquesPorLinguagem(req, res, next){
+    async listarDestaquesPorLinguagem(req, res, next) {
 
         try {
-            let response = await service.listarDestaquesPorLinguagem(req.params);
-
-            res.status(200).json(response.data);
+            let listaDestaques = await service.listarDestaquesPorLinguagem(req.params);
+            res.status(200).json(listaDestaques);
         } catch (error) {
-            res.status(500).json({mensagem: error.message});
+            res.status(500).json({ mensagem: "Erro ao requisitar lista de repositorios" });
         }
     }
     

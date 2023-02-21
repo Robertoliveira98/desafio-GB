@@ -17,25 +17,19 @@ afterEach(() => {
 
 describe("Class DestaquesService", () => {
   describe("Method listarDestaquesPorLinguagem", () => {
-    it("Sucesso", async () => {
-      let mockParams = {
-        linguagem: "Java",
-      };
-
-      let mockResponse = {
-        codigo: 200,
-        data: {
-          nome: "Teste",
-          linguagem: "Java",
+    it("return lista", async () => {
+      let mockDestaques = [
+        {
+          nome: "teste",
+          criador: "nome criador",
+          linguageem: "Java",
         },
-      };
+      ];
+      const stub = sandbox.stub(destaquesModel, "aggregate").resolves(mockDestaques);
 
-      sandbox.stub(destaquesService, "_getValueOrDefault").returns("Java");
-      sandbox.stub(githubAdapter, "requestGithubApi").resolves(mockResponse);
-      const response = await destaquesService.listarDestaquesPorLinguagem(
-        mockParams
-      );
-      expect(response).to.deep.equal(mockResponse);
+      const response = await destaquesService.listarDestaquesPorLinguagem();
+      expect(stub.calledOnce).to.be.true;
+      expect(response).to.deep.equal(mockDestaques);
     });
   });
 

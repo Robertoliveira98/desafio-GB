@@ -6,8 +6,8 @@ module.exports = function (app) {
 
     app.get('/', controllers.index);
 
-    app.get('/listarDestaquesApi/:linguagem', (req, res, next) => {
-         destaquesController.listarDestaquesPorLinguagem(req, res, next);
+    app.get('/listarDestaques/:linguagem', (req, res, next) => {
+        destaquesController.listarDestaquesPorLinguagem(req, res, next);
     });
 
     app.get('/salvarDestaques', populaLinguagens, (req, res, next) => {

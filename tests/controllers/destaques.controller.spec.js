@@ -8,47 +8,51 @@ const expect = chai.expect;
 let sandbox = require('sandbox');
 
 beforeEach(() => {
-  sandbox = sinon.createSandbox();
+	sandbox = sinon.createSandbox();
 });
 
 afterEach(() => {
-  sandbox.restore();
+	sandbox.restore();
 });
 
 describe('Class DestaquesController', () => {
 
-  describe('Method listarDestaquesPorLinguagem', () => {
-    it('Sucesso', async () => {
+	describe('Method listarDestaquesPorLinguagem', () => {
+		it('Sucesso', async () => {
 
-      let mock = {
-        data: [
-          {
-            nome: "teste",
-            criador: "nome criador",
-            linguageem: "Java"
-          }
-        ]
-      }
+			let mock = [
+				{
+					nome: "teste",
+					criador: "nome criador",
+					linguageem: "JavasScript"
+				},
+				{
+					nome: "teste",
+					criador: "nome criador",
+					linguageem: "JavasScript"
+				}
+			];
 
-      sandbox.stub(destaquesService, "listarDestaquesPorLinguagem").resolves(mock);
-      const res = await request(app).get("/listarDestaquesApi/Java");
-      expect(res.status).to.equal(200);
-      expect(res.body).to.deep.equal(mock.data);
-    });
+			sandbox.stub(destaquesService, "listarDestaquesPorLinguagem").resolves(mock);
+			const res = await request(app).get("/listarDestaques/javascript");
+			expect(res.status).to.equal(200);
+			expect(res.body).to.deep.equal(mock);
+		});
+		it('Error', async () => {
 
-    it('error', async () => {
-      let error = {
-        mensagem: "error"
-      }
-      sandbox.stub(destaquesService, "listarDestaquesPorLinguagem").rejects({message: "error"});
-      const res = await request(app).get("/listarDestaquesApi/Java");
-      expect(res.status).to.equal(500);
-      expect(res.body).to.deep.equal(error);
-    });
-  });
+			let error = {
+				mensagem: "Erro ao requisitar lista de repositorios"
+			}
+
+			sandbox.stub(destaquesService, "listarDestaquesPorLinguagem").rejects();
+			const res = await request(app).get("/listarDestaques/javascript");
+			expect(res.status).to.equal(500);
+			expect(res.body).to.deep.equal(error);
+		});
+	});
 
 	describe('Method salvarDestaquesLista', () => {
-		
+
 		let mock = [
 			{
 				nome: "teste",
@@ -109,75 +113,75 @@ describe('Class DestaquesController', () => {
 		});
 	});
 
-  describe('Method listarDestaques', () => {
-    it('Sucesso', async () => {
+	describe('Method listarDestaques', () => {
+		it('Sucesso', async () => {
 
-      let mock = [
-          {
-            nome: "teste",
-            criador: "nome criador",
-            linguageem: "Java"
-          },
-          {
-            nome: "teste",
-            criador: "nome criador",
-            linguageem: "Java"
-          }
-        ];
+			let mock = [
+				{
+					nome: "teste",
+					criador: "nome criador",
+					linguageem: "Java"
+				},
+				{
+					nome: "teste",
+					criador: "nome criador",
+					linguageem: "Java"
+				}
+			];
 
-      sandbox.stub(destaquesService, "listarDestaques").resolves(mock);
-      const res = await request(app).get("/listarDestaques");
-      expect(res.status).to.equal(200);
-      expect(res.body).to.deep.equal(mock);
-    });
-    it('Error', async () => {
+			sandbox.stub(destaquesService, "listarDestaques").resolves(mock);
+			const res = await request(app).get("/listarDestaques");
+			expect(res.status).to.equal(200);
+			expect(res.body).to.deep.equal(mock);
+		});
+		it('Error', async () => {
 
-      let error = {
-        mensagem: "Erro ao requisitar lista de repositorios"
-      }
+			let error = {
+				mensagem: "Erro ao requisitar lista de repositorios"
+			}
 
-      sandbox.stub(destaquesService, "listarDestaques").rejects();
-      const res = await request(app).get("/listarDestaques");
-      expect(res.status).to.equal(500);
-      expect(res.body).to.deep.equal(error);
-    });
-  });
+			sandbox.stub(destaquesService, "listarDestaques").rejects();
+			const res = await request(app).get("/listarDestaques");
+			expect(res.status).to.equal(500);
+			expect(res.body).to.deep.equal(error);
+		});
+	});
 
-  describe('Method destalhesRepositorio', () => {
-    it('Sucesso', async () => {
+	describe('Method destalhesRepositorio', () => {
+		it('Sucesso', async () => {
 
-      let mock = {
-        nome: "teste",
-        criador: "nome criador",
-        linguageem: "Java"
-      };
+			let mock = {
+				nome: "teste",
+				criador: "nome criador",
+				linguageem: "Java"
+			};
 
-      sandbox.stub(destaquesService, "detalhesRepositorio").resolves(mock);
-      const res = await request(app).get("/detalhes/123");
-      expect(res.status).to.equal(200);
-      expect(res.body).to.deep.equal(mock);
-    });
-    it('Error Id não encontrado', async () => {
-      let error = {
-        mensagem: "Id não encontrado"
-      }
+			sandbox.stub(destaquesService, "detalhesRepositorio").resolves(mock);
+			const res = await request(app).get("/detalhes/123");
+			expect(res.status).to.equal(200);
+			expect(res.body).to.deep.equal(mock);
+		});
+		it('Error Id não encontrado', async () => {
+			let error = {
+				mensagem: "Id não encontrado"
+			}
 
-      sandbox.stub(destaquesService, "detalhesRepositorio").resolves(undefined);
-      const res = await request(app).get("/detalhes/123");
-      expect(res.status).to.equal(500);
-      expect(res.body).to.deep.equal(error);
-    });
-    it('Error', async () => {
-      let error = {
-        mensagem: "Erro ao requisitar detalhes do repositorio"
-      }
+			sandbox.stub(destaquesService, "detalhesRepositorio").resolves(undefined);
+			const res = await request(app).get("/detalhes/123");
+			expect(res.status).to.equal(500);
+			expect(res.body).to.deep.equal(error);
+		});
+		it('Error', async () => {
+			let error = {
+				mensagem: "Erro ao requisitar detalhes do repositorio"
+			}
 
-      sandbox.stub(destaquesService, "detalhesRepositorio").rejects();
-      const res = await request(app).get("/detalhes/123");
-      expect(res.status).to.equal(500);
-      expect(res.body).to.deep.equal(error);
-    });
-  });
+			sandbox.stub(destaquesService, "detalhesRepositorio").rejects();
+			const res = await request(app).get("/detalhes/123");
+			expect(res.status).to.equal(500);
+			expect(res.body).to.deep.equal(error);
+		});
+	});
 
 	describe('Method getLinguagens', () => {
 		it('Sucesso', async () => {
