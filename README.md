@@ -6,9 +6,9 @@ Executar em http://localhost:27017
 
 Nome do banco: "desafioGB"
 
+# Instalação
 Node v14.16.0
 
-# Instalação
 ```bash 
 npm install
 ```
