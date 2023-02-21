@@ -15,8 +15,6 @@ npm install
 
 # Execução
 
-### Executar MongoDB
-
 ```bash
 npm start
 ```
